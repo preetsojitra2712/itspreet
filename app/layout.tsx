@@ -1,8 +1,8 @@
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { Navbar } from "@/components/Navbar";
-import { BackgroundFX } from "@/components/BackgroundFX";
+import { Providers } from "@/components/providers";
+import { profile } from "@/content/preet";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,21 +14,34 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const metadata: Metadata = {
+  metadataBase: new URL("https://preet-sojitra.vercel.app"),
+  title: `${profile.name} | ${profile.titles.join(" • ")}`,
+  description:
+    "FAANG-ready AI/ML/Software engineering portfolio with measurable impact, case studies, and recruiter-focused evidence.",
+  openGraph: {
+    title: `${profile.name} Portfolio`,
+    description: profile.summary,
+    type: "website",
+    siteName: `${profile.name} Portfolio`,
+  },
+  alternates: {
+    canonical: "/",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-[#05070d] text-white antialiased`}
-      >
-        <ThemeProvider>
-          <BackgroundFX />
-          <Navbar />
-          {children}
-        </ThemeProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
