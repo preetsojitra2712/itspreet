@@ -47,8 +47,8 @@ export function AskPreetWidget() {
                 match.topProjects.map((item) => item.title).join(", ") || "Not in my portfolio data"
               }\nWhy Preet fits:\n${match.whyPreetFits.map((item) => `- ${item}`).join("\n")}`;
             })()
-          : `${answerWithTools(userText).text}\n\n(Demo mode: deterministic local portfolio answers. Add YOU_API_KEY for live AI.)`;
-      setConfigured(false);
+          : answerWithTools(userText).text;
+      setConfigured(true);
       setMessages((prev) => [...prev, { role: "assistant", text }]);
       setLoading(false);
       return;

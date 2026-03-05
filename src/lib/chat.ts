@@ -14,6 +14,14 @@ export type ChatAnswer = {
 
 export function answerWithTools(input: string): ChatAnswer {
   const query = input.trim().toLowerCase();
+  const asksDifferentiator =
+    query.includes("what is special in preet") ||
+    query.includes("what is special about preet") ||
+    query.includes("difference in preet") ||
+    query.includes("different from other candidate") ||
+    query.includes("different than other candidate") ||
+    query.includes("why preet") ||
+    query.includes("why should we hire preet");
 
   const isGreeting = /^(hi|hello|hey|hii|hiii|hallo|hola|yo)\b/.test(query);
   const isShortSmallTalk = query.split(/\s+/).length <= 2;
@@ -42,6 +50,13 @@ export function answerWithTools(input: string): ChatAnswer {
       references: payload ? [`projects.${payload.slug}`] : ["projects"],
       toolUsed: "getProject",
       toolPayload: payload,
+    };
+  }
+
+  if (asksDifferentiator) {
+    return {
+      text: `What makes Preet stand out vs many early-career candidates:\n- Proven scale impact: backend systems supporting 500K+ MAU and 2M+ monthly queries.\n- Measurable execution: 84% faster debugging workflows and ~65% faster release lead time improvements.\n- AI + systems depth together: ships LLM/agentic pipelines while also handling microservices, CI/CD, and reliability.\n- Strong research-to-production range: VLM bias-evaluation pipelines (10K+ images) plus production-grade API automation.\n- Global engineering exposure: Google Summer of Code work across 40+ locales and large internationalization datasets.\n\nIn short: strong combination of measurable impact, broad technical range, and practical delivery speed.`,
+      references: ["experiences", "projects", "profile.summary"],
     };
   }
 
@@ -118,8 +133,12 @@ export function answerWithTools(input: string): ChatAnswer {
   }
 
   const evidence = retrieve(input, 2);
+  const conciseEvidence = evidence.map((item) => {
+    const firstSentence = item.text.split(".")[0]?.trim();
+    return firstSentence && firstSentence.length > 0 ? firstSentence : item.text;
+  });
   return {
-    text: `Based on portfolio data:\n${evidence.map((item) => `- ${item.text}`).join("\n")}\n\nYou can also use:\n- getProject: <slug>\n- skills: <category>\n- jobMatch: <job description>`,
+    text: `Based on portfolio data:\n${conciseEvidence.map((item) => `- ${item}`).join("\n")}\n\nYou can also ask:\n- why should we hire preet?\n- getProject: <slug>\n- skills: <category>\n- jobMatch: <job description>`,
     references: evidence.map((item) => item.source),
   };
 }
