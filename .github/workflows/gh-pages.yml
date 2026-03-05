@@ -2,7 +2,7 @@ name: Deploy static portfolio to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
+    branches: ["master", "main"]
   workflow_dispatch:
 
 permissions:
@@ -31,10 +31,7 @@ jobs:
         run: npm ci
 
       - name: Build static export (demo mode)
-        run: npm run build
-        env:
-          STATIC_EXPORT: "true"
-          NEXT_PUBLIC_DEMO_ONLY: "true"
+        run: npm run build:static
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
