@@ -5,6 +5,7 @@ import { Bot, Send } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { answerWithTools } from "@/lib/chat";
 import { jobMatch } from "@/lib/job-match";
 
 const demoOnly = process.env.NEXT_PUBLIC_DEMO_ONLY === "true";
@@ -46,7 +47,7 @@ export function AskPreetWidget() {
                 match.topProjects.map((item) => item.title).join(", ") || "Not in my portfolio data"
               }\nWhy Preet fits:\n${match.whyPreetFits.map((item) => `- ${item}`).join("\n")}`;
             })()
-          : "AI not configured - add YOU_API_KEY to enable live grounded chat. Demo mode supports jobMatch.";
+          : `${answerWithTools(userText).text}\n\n(Demo mode: deterministic local portfolio answers. Add YOU_API_KEY for live AI.)`;
       setConfigured(false);
       setMessages((prev) => [...prev, { role: "assistant", text }]);
       setLoading(false);
