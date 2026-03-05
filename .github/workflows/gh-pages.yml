@@ -32,6 +32,8 @@ jobs:
 
       - name: Build static export (demo mode)
         run: npm run build:static
+        env:
+          NEXT_PUBLIC_BASE_PATH: /itspreet
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
